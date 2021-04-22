@@ -9,7 +9,7 @@
       </div>
 
       <!-- body -->
-      <div class="modal-body">
+      <div class="modal-body"></div>
 
     </div>
   </div>
