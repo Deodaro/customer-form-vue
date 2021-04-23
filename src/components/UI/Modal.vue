@@ -1,18 +1,23 @@
 <template>
-  <div class="modal__wrapper">
-    <div class="modal-content">
+  <transition name="modal">
+    <div class="modal__wrapper" @click="$emit('close')">
+      <div class="modal-content" @click.stop="">
 
-      <!-- header -->
-      <div class="modal-header">
-        <span class="modal-title"> {{ title }} </span>
-        <span class="button-close" @click="$emit('close')">×</span>
+        <!-- header -->
+        <div class="modal-header">
+          <span class="modal-title"> {{ title }} </span>
+          <span class="button-close" @click="$emit('close')">×</span>
+        </div>
+
+        <!-- body -->
+        <div class="modal-body">
+          <slot name="body"> default body </slot>
+        </div>
+
       </div>
-
-      <!-- body -->
-      <div class="modal-body"></div>
-
     </div>
-  </div>
+  </transition>
+  
 </template>
 
 <script>
@@ -23,12 +28,29 @@ export default {
       required: true
     }
   },
+  mounted () {
+    document.body.addEventListener('keyup', e => {
+      if (e.key === 'Escape') this.$emit('close')
+    })
+  },
   computed: {},
   methods: {}
 }
 </script>
 
 <style lang="scss" scoped>
+
+// animation
+.modal-enter {
+  opacity: 0
+}
+.modal-leave-active {
+  opacity: 0
+}
+.modal-enter .modal-content,
+.modal-leave-active .modal-content {
+  transform: scale(1.2);
+}
 
 .modal__wrapper{
   display: flex;
