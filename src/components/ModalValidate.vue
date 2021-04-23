@@ -5,11 +5,25 @@
     <!-- body -->
     <div slot="body">
       <form @submit.prevent="">
-        <label>Name</label>
-        <input type="text" v-bind="name">
-        <label>Email</label>
-        <input type="email" v-bind="email">
-        <button class="btn btnPrimary">Submit</button>
+        <!-- класс errorInput появится только тогда, когда есть ошибки (когда error = true) -->
+        <!-- name -->
+        <div class="form-item" :class="{ errorInput: $v.name.$error }">
+          <label>Name:</label>
+          <p class="errorText" v-if="!$v.name.required">Field is required!</p>
+          <p class="errorText" v-if="!$v.name.minLength">Name must have at least {{ $v.name.$params.minLength.min }}!</p>
+          <input
+            v-model="name"
+            :class="{ error: $v.name.$error }"
+            @change="$v.name.$touch()">
+        </div>
+
+        <!-- email -->
+        <div class="form-item">
+          <label>Email:</label>
+          <input v-bind="email">
+          <button class="btn btnPrimary">Submit</button>
+        </div>
+     
       </form> 
     </div>
   </modal>
@@ -40,3 +54,20 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.form-item .errorText {
+  display: none;
+  margin-bottom: 8px;
+  font-size: 13px;
+  color: #fc5c65;
+}
+.form-item {
+  &.errorInput .errorText {
+  display: block;
+  }
+}
+input.error {
+  border-color: #fc5c65;
+}
+</style>
