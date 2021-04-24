@@ -2,16 +2,9 @@
   <transition name="modal">
     <div class="modal__wrapper" @click="$emit('close')">
       <div class="modal-content" @click.stop="">
-
-        <!-- header -->
-        <div class="modal-header">
-          <span class="modal-title"> {{ title }} </span>
-          <span class="button-close" @click="$emit('close')">×</span>
-        </div>
-
-        <!-- body -->
         <div class="modal-body">
-          <slot name="body"> default body </slot>
+          <p>Новый клиент успешно создан!</p>
+          <button class="btn btnPrimary" @click="$emit('close')">Ok</button>
         </div>
 
       </div>
@@ -22,12 +15,6 @@
 
 <script>
 export default {
-  props: {
-    title: {
-      type: String,
-      required: true
-    }
-  },
   mounted () {
     document.body.addEventListener('keyup', e => {
       if (e.key === 'Escape') this.$emit('close')
@@ -44,14 +31,17 @@ export default {
 .modal-enter {
   opacity: 0
 }
+
 .modal-leave-active {
   opacity: 0
 }
+
 .modal-enter .modal-content,
 .modal-leave-active .modal-content {
   transform: scale(1.2);
 }
 
+// static
 .modal__wrapper{
   display: flex;
   justify-content: center;
@@ -80,22 +70,12 @@ export default {
     min-width: 500px;
   }
 }
-.modal-header {
-  display: flex;
-  align-self: center;
-  justify-content: space-between;
-  padding-bottom: 20px;
-  span {
-    font-size: 24px;
-  }
-  .button-close {
-    cursor: pointer;
-  }
-}
+
 .modal-body {
   text-align: center;
+  margin: 1.5em;
+  p {
+    margin-bottom: 20px;
+  }
 }
-
-
-
 </style>

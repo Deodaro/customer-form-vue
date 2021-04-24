@@ -1,9 +1,8 @@
 <template>
-
+  <div class="wrapper">
   <form @submit.prevent="onSubmit">
 
     <h1>Создание клиента</h1>
-    <!-- <p><span>Поля, отмеченные *, обязательны для заполнения.</span></p> -->
 
     <!-- surname -->
     <div class="form-item" :class="{ errorInput: $v.surname.$error }">
@@ -58,12 +57,8 @@
       <label>Номер телефона *</label>
       <div class="input-wrapper">
         <p class="errorText" v-if="!$v.tel.required">Пожалуйста, заполните это поле!</p>
-        <!-- <p class="errorText" v-if="!$v.tel.numeric">Укажите номер в формате 7 999 999 9999</p> -->
-        <!-- <p class="errorText" v-if="!$v.tel.isPhone">Укажите номер в формате 7 999 999 9999</p> -->
         <p class="errorText" v-if="!$v.tel.between">Укажите номер в формате 7999999999</p>
-        <!-- <p class="errorText" v-if="!$v.tel.tel">Указан неверный номер телефона</p> -->
         <p class="errorText" v-if="!$v.tel.minLength">Укажите {{ $v.tel.$params.minLength.min }} цифр в номере телефона</p>
-        <!-- <p class="errorText" v-if="!$v.tel.minLength">Укажите номер в формете +7 (___) ___ ____</p> -->
         <input
           type="tel"
           placeholder="7999999999"
@@ -92,12 +87,12 @@
       <div class="input-wrapper">
         <p class="errorText" v-if="!$v.group.required">Пожалуйста, заполните это поле!</p>
         <select
-          multiple
-          name=""
-          id=""
+          name="group"
+          class="multiselect"
           v-model="group"
           :class="{ error: $v.group.$error }"
-          @change="$v.group.$touch()">
+          @change="$v.group.$touch()"
+          multiple>
           <option value="vip">VIP</option>
           <option value="difficult">Проблемные</option>
           <option value="oms">ОМС</option>
@@ -124,13 +119,14 @@
       <label>Не отправлять СМС</label>
       <div class="input-wrapper">
         <input
+          class="checkbox"
           type="checkbox"
           v-model="notSms"
           @change="$v.notSms.$touch()">
       </div>
     </div>
 
-    <h2>Адрес:</h2>
+    <h2>Адрес</h2>
 
     <!-- post code -->
     <div class="form-item" :class="{ errorInput: $v.surname.$error }">
@@ -260,29 +256,21 @@
     </div>
 
     <!-- submit button -->
-    <button class="btn btnPrimary">Submit</button>
-
-    <!-- template -->
-    <div class="form-item" :class="{ errorInput: $v.surname.$error }">
-      <label>Фамилия *</label>
-      <div class="input-wrapper">
-        <p class="errorText" v-if="!$v.surname.required">Пожалуйста, заполните это поле!</p>
-        <input
-          v-model="surname"
-          :class="{ error: $v.surname.$error }"
-          @change="$v.surname.$touch()">
-      </div>  
-    </div>
+    <button class="btn btnPrimary">Создать</button>
 
   </form>
+
+  <successMessage v-show="successMessage" @close="successMessage = false" />
+
+  </div>
 </template>
 
 <script>
 import { required, minLength, numeric, between } from 'vuelidate/lib/validators'
-import modal from '@/components/UI/Modal.vue'
+import successMessage from '@/components/UI/SuccessMessage.vue'
 
 export default {
-  components: { modal },
+  components: { successMessage },
   data () {
     return {
       surname: '',
@@ -304,12 +292,14 @@ export default {
       documentSeries: '',
       documentNumber: '',
       issuingOrg: '',
-      issuingDate: ''
+      issuingDate: '',
+      successMessage: false
     }
   },
   validations: {
     surname: { required },
     name: { required },
+    patronymic: {},
     birthday: { required },
     tel: {
       required,
@@ -322,8 +312,15 @@ export default {
     doctor: {},
     notSms: {},
     postCode: { numeric },
+    country: {},
+    region: {},
     city: { required },
+    street: {},
+    building: {},
     documentType: { required },
+    documentSeries: {},
+    documentNumber: {},
+    issuingOrg: {},
     issuingDate: { required }
   },
   methods: {
@@ -353,7 +350,7 @@ export default {
           issuingDate: this.issuingDate
         }
         console.log(user)
-        // reset and close
+        // reset
         this.surname = ''
         this.name = ''
         this.patronymic = ''
@@ -362,8 +359,6 @@ export default {
         this.gender = ''
         this.group = []
         this.doctor = ''
-        // TODO сброс чекбокса
-        // this.notSms.checked = false
         this.postCode = ''
         this.country = ''
         this.region = ''
@@ -377,7 +372,8 @@ export default {
         this.issuingDate = ''
 
         this.$v.$reset()
-        this.$emit('close')
+        
+        this.successMessage = true
       }
     }
   }
@@ -386,20 +382,24 @@ export default {
 
 <style lang="scss">
 
-form h1 {
-  font-size: 26px;
+form {
+  text-align: center;
 }
+
 .form-item {
   display: flex;
   align-items: center;
   margin-bottom: 1%;
-  // justify-content: flex-start;
-  border: 1px solid #c7c4c4;
+  justify-content: center;
+
+  &.errorInput .errorText {
+    display: block;
+  }
 }
 .form-item label {
-  min-width: 30%;
-  margin: 0;
-
+  width: 25vw;
+  text-align: right;
+  padding-right: 1em;
 }
 .form-item .errorText {
   display: none;
@@ -407,23 +407,32 @@ form h1 {
   font-size: 13px;
   color: #fc5c65;
 }
-.form-item {
-  &.errorInput .errorText {
-  display: block;
-  }
-}
+
 .input-wrapper {
+  width: 50vw;
+  padding-right: 25vw;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
+
 .input-wrapper input {
-  margin-bottom: 0;
   &.date {
     color: #606266;
   }
+  &.checkbox {
+    width: 1em;
+  }
 }
-input.error {
+
+input.error,
+select.error {
   border-color: #fc5c65;
+}
+
+.multiselect {
+  background-image: none;
+  padding-bottom: 0;
+  border-radius: 0;
 }
 </style>
