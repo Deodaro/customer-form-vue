@@ -25,3 +25,11 @@ npm run serve
 ```
 npm run build
 ```
+
+## Демо
+
+https://deodaro.github.io/customer-form-vue/
+
+## Скриншот
+
+![](./preview.png)
