@@ -14,13 +14,13 @@
 npm install
 ```
 
-Запуск в development mode
+#### Запуск в development mode
 
 ```
 npm run serve
 ```
 
-Запуск в production mode
+#### Запуск в production mode
 
 ```
 npm run build
