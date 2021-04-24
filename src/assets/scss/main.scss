@@ -70,6 +70,7 @@ section, .section {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  padding: 1%;
   &.wrapper-content--fixed {
     margin-top: 80px;
   }

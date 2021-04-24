@@ -5,18 +5,14 @@
       <section>
         <div class="containter">
 
-          <!-- modal with validate -->
-          <button class="btn btnPrimary" @click="modalValidate = !modalValidate">Show modal with form + validate</button>
-          <modalValidate v-show="modalValidate" @close="modalValidate = false"/>
-
           <!-- customer form -->
           <!-- <button class="btn btnPrimary" @click="customerForm = !customerForm">Создать клиента</button>
           <customerForm v-show="customerForm" @close="customerForm = false" /> -->
           
-          <button class="btn btnPrimary" @click="customerForm = !customerForm">Создать клиента</button>
-          <customerForm v-show="customerForm" @close="customerForm = false" /> 
-          
-          <!-- <customerForm /> -->
+          <!-- <button class="btn btnPrimary" @click="customerForm = !customerForm">Создать клиента</button>
+          <customerForm v-show="customerForm" @close="customerForm = false" />  -->
+
+          <customerForm />
           
 
         </div>
