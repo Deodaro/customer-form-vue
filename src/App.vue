@@ -41,6 +41,10 @@
           <button class="btn btnPrimary" @click="modalValidate = !modalValidate">Show modal with form + validate</button>
           <modalValidate v-show="modalValidate" @close="modalValidate = false"/>
 
+          <!-- customer form -->
+          <button class="btn btnPrimary" @click="customerForm = !customerForm">Создать клиента</button>
+          <customerForm v-show="customerForm" @close="customerForm = false" />
+
         </div>
       </section>
 
@@ -52,10 +56,13 @@
 
 import modals from '@/components/UI/Modal.vue'
 import modalValidate from '@/components/ModalValidate.vue'
+import customerForm from '@/components/CustomerForm.vue'
+
 export default {
   components: {
     modals,
-    modalValidate
+    modalValidate,
+    customerForm
   },
   data() {
     return {
@@ -65,7 +72,8 @@ export default {
         name: '',
         email: ''
       },
-      modalValidate: false
+      modalValidate: false,
+      customerForm: false
     }
   },
   methods: {

@@ -1,6 +1,6 @@
 <template>
   <modal
-    title="Modal with form"
+    title="Создание клиента"
     @close="$emit('close')">
     <!-- body -->
     <div slot="body">
